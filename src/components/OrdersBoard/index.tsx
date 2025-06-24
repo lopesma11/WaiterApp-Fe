@@ -1,12 +1,14 @@
 import React from "react";
 import { Board, OrdersContainer } from "../OrdersBoard/styles";
+import type { Order } from "../../types/Order";
 
 interface OrdersBoardProps {
     icon: string;
     title: string;
+    orders: Order[];
 }
 
-export function OrdersBoard({ icon, title }: OrdersBoardProps) {
+export function OrdersBoard({ icon, title, orders }: OrdersBoardProps) {
     return (
         <Board>
             <header>
