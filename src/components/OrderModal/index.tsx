@@ -9,6 +9,7 @@ interface OrderModalProps {
     order: Order | null;
     onClose: () => void;
     onCancelOrder: () => Promise<void>;
+    onChangeOrderStatus: () => void;
     isLoading: boolean;
 }
 
@@ -17,6 +18,7 @@ export function OrderModal({
     order,
     onClose,
     onCancelOrder,
+    onChangeOrderStatus,
     isLoading,
 }: OrderModalProps) {
     if (!visible || !order) {
@@ -83,14 +85,25 @@ export function OrderModal({
                     </div>
 
                     <Actions>
-                        <button
-                            type="button"
-                            className="primary"
-                            disabled={isLoading}
-                        >
-                            <span>👩‍🍳</span>
-                            <span>Iniciar Produção</span>
-                        </button>
+                        {order.status !== "DONE" && (
+                            <button
+                                type="button"
+                                className="primary"
+                                disabled={isLoading}
+                                onClick={onChangeOrderStatus}
+                            >
+                                <span>
+                                    {order.status === "WAITING" && "👩‍🍳"}
+                                    {order.status === "IN_PRODUCTION" && "✅"}
+                                </span>
+                                <span>
+                                    {order.status === "WAITING" &&
+                                        "Iniciar Produção"}
+                                    {order.status === "IN_PRODUCTION" &&
+                                        "Concluir Pedido"}
+                                </span>
+                            </button>
+                        )}
                         <button
                             type="button"
                             className="secundary"
@@ -99,7 +112,7 @@ export function OrderModal({
                         >
                             Cancelar Pedido
                         </button>
-                        🕑👩‍🍳✅
+                        {/* 🕑👩‍🍳✅ */}
                     </Actions>
                 </OrderDetails>
             </ModalBody>
