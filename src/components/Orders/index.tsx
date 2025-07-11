@@ -13,6 +13,10 @@ export function Orders() {
         const socket = socketIo("http://localhost:3001", {
             transports: ["websocket"],
         });
+
+        socket.on("order@new", (order) => {
+            setOrders((prevState) => prevState.concat(order));
+        });
     }, []);
 
     useEffect(() => {
