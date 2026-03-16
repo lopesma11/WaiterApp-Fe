@@ -81,7 +81,7 @@ export function OrderModal({
 
                     <div className="total">
                         <span>Total</span>
-                        <strong>{total}</strong>
+                        <strong>{formatCurrency(total)}</strong>
                     </div>
 
                     <Actions>
