@@ -20,7 +20,6 @@ export const Content = styled.div`
             color: #fff;
             font-size: 32px;
         }
-
         h2 {
             color: #fff;
             font-weight: 400;
@@ -28,5 +27,20 @@ export const Content = styled.div`
             opacity: 0.9;
             margin-top: 6px;
         }
+    }
+`;
+
+export const LogoutButton = styled.button`
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
     }
 `;
