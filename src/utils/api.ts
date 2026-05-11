@@ -22,14 +22,17 @@ api.interceptors.response.use(
     (error) => {
         if (error.response) {
             const status = error.response.status;
-            const message = error.response.data?.error ?? "Algo deu errado";
+            const message =
+                error.response.data?.error ?? "Something went wrong";
 
             if (status === 401) {
-                localStorage.removeItem(TOKEN_KEY);
+                localStorage.removeItem("@novosnack:token");
                 window.location.href = "/";
                 toast.error("Sessão expirada. Faça login novamente.");
             } else if (status === 404) {
-                toast.error("Recurso não encontrado");
+                toast.error(message);
+            } else if (status === 422) {
+                toast.error(message);
             } else if (status === 400) {
                 toast.error(`Dados inválidos: ${message}`);
             } else if (status >= 500) {
