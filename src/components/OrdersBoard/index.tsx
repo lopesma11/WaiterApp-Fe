@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { Board, OrdersContainer } from "../OrdersBoard/styles";
 import type { Order } from "../../types/Order";
 import { OrderModal } from "../OrderModal";
-import { api } from "../../utils/api";
+import api from "../../utils/api";
 
 interface OrdersBoardProps {
     icon: string;
@@ -36,33 +36,37 @@ export function OrdersBoard({
 
     async function handleChangeOrderStatus() {
         setIsLoading(true);
+        try {
+            const status =
+                selectedOrder?.status === "WAITING" ? "IN_PRODUCTION" : "DONE";
 
-        const status =
-            selectedOrder?.status === "WAITING" ? "IN_PRODUCTION" : "DONE";
+            await api.patch(`/orders/${selectedOrder?._id}`, {
+                status,
+            });
 
-        await api.patch(`/orders/${selectedOrder?._id}`, {
-            status: status,
-        });
-
-        toast.success(
-            `O pedido da mesa ${selectedOrder?.table} teve o status alterado para : ${status}!`
-        );
-        onChangeOrderStatus(selectedOrder!._id, status);
-        setIsLoading(false);
-        setIsModalVisible(false);
+            toast.success(
+                `O pedido da mesa ${selectedOrder?.table} teve o status alterado para: ${status}!`,
+            );
+            onChangeOrderStatus(selectedOrder!._id, status);
+            setIsModalVisible(false);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     async function handleCancelOrder() {
         setIsLoading(true);
+        try {
+            await api.delete(`/orders/${selectedOrder?._id}`);
 
-        await api.delete(`/orders/${selectedOrder?._id}`);
-
-        toast.success(
-            `O pedido da mesa ${selectedOrder?.table} foi cancelado!`
-        );
-        onCancelOrder(selectedOrder!._id);
-        setIsLoading(false);
-        setIsModalVisible(false);
+            toast.success(
+                `O pedido da mesa ${selectedOrder?.table} foi cancelado!`,
+            );
+            onCancelOrder(selectedOrder!._id);
+            setIsModalVisible(false);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (

@@ -21,7 +21,7 @@ export function Login() {
         try {
             setIsLoading(true);
 
-            const { data } = await api.post("/auth/login", { email, password });
+            const { data } = await api.post("/login", { email, password });
 
             signIn(data.token);
         } finally {
@@ -57,7 +57,7 @@ export function Login() {
                 }}
             >
                 <h2 style={{ textAlign: "center", marginBottom: "0.5rem" }}>
-                    Entrar no painel
+                    Entrar no Painel
                 </h2>
 
                 <input

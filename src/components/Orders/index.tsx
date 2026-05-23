@@ -1,22 +1,21 @@
-import React, { useEffect } from "react";
-import socketIo from "socket.io-client";
+import { useEffect, useState } from "react";
 import { Container } from "./styles";
 import { OrdersBoard } from "../OrdersBoard";
-import { useState } from "react";
 import type { Order } from "../../types/Order";
-import { api } from "../../utils/api";
+import api from "../../utils/api";
+import socket from "../../utils/socket";
 
 export function Orders() {
     const [orders, setOrders] = useState<Order[]>([]);
 
     useEffect(() => {
-        const socket = socketIo("http://localhost:3001", {
-            transports: ["websocket"],
-        });
-
         socket.on("order@new", (order) => {
             setOrders((prevState) => prevState.concat(order));
         });
+
+        return () => {
+            socket.off("order@new");
+        };
     }, []);
 
     useEffect(() => {
@@ -27,21 +26,21 @@ export function Orders() {
 
     const waitingStatus = orders.filter((order) => order.status === "WAITING");
     const inProductionStatus = orders.filter(
-        (order) => order.status === "IN_PRODUCTION"
+        (order) => order.status === "IN_PRODUCTION",
     );
     const doneStatus = orders.filter((order) => order.status === "DONE");
 
     function handleCancelOrder(orderId: string) {
         setOrders((prevState) =>
-            prevState.filter((order) => order._id !== orderId)
+            prevState.filter((order) => order._id !== orderId),
         );
     }
 
     function handleOrderStatusChange(orderId: string, status: Order["status"]) {
         setOrders((prevState) =>
             prevState.map((order) =>
-                order._id === orderId ? { ...order, status } : order
-            )
+                order._id === orderId ? { ...order, status } : order,
+            ),
         );
     }
 
